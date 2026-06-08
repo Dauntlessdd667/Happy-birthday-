@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Birthday Program 💻</title>
+<style>
+    body {
+        background-color: black;
+        color: greenyellow;
+        font-family: monospace;
+        text-align: center;
+        padding-top: 50px;
+    } 
+    #output {
+        white-space: pre-wrap;
+        font-size: 18px;
+        margin-top: 20px;
+    }
+    .heart {
+        line-height: 0.9; 
+        font-size: 20px;
+        margin-top: 100px;
+    }
+</style> 
+</head>
+<body>
+<div id="output"></div>
+<script>
+const output = document.getElementById("output");
+function slowPrint(msg, delay = 50) {
+    return new Promise(resolve => {
+        let i = 0;
+        function type() {
+            if (i < msg.length) {
+                output.innerHTML += msg[i];
+                i++;
+                setTimeout(type, delay);
+            } else {
+                output.innerHTML += "<br>";
+                resolve();
+            }
+        }
+        type();
+    });
+}
+function clearScreen() {
+    output.innerHTML = "";
+}
+async function heartAnimation() {
+    const heart = [
+        "   ..       ..   ",
+        "  ....     ....  ",
+        " ......   ...... ",
+        " ............... ",
+        "  .............  ", 
+        "   ...........   ",
+        "     ........     ",
+        "       .....       ",
+        "        ...        ",
+        "         .         "
+    ];
+
+    for (let i = 0; i < 3; i++) {
+        clearScreen();
+        output.innerHTML = "<div class='heart'>" + heart.join("<br>") + "</div>";
+        await new Promise(r => setTimeout(r, 1000));
+    }
+    clearScreen();
+}
+async function runProgram() {
+    clearScreen();
+    await slowPrint("Booting birthday program 💻...");
+    await new Promise(r => setTimeout(r, 1000));
+    await heartAnimation();
+    await slowPrint("Hey babe 💕");
+    await new Promise(r => setTimeout(r, 1000));
+    await slowPrint("I know today’s your special day...");
+    await new Promise(r => setTimeout(r, 1000));
+    await slowPrint("So I wrote this code just for you 🥺💖");
+    await new Promise(r => setTimeout(r, 1000));
+    await slowPrint("Happy birthday my love! 🎉🎂");
+    await new Promise(r => setTimeout(r, 1000));
+    await slowPrint("You're not just special to me...");
+    await slowPrint("You're the entire main function in my life 😌");
+    await new Promise(r => setTimeout(r, 1000));
+    await slowPrint("No syntax error could ever stop what I feel for you 💘");
+    await new Promise(r => setTimeout(r, 1000));
+    await slowPrint("And I want you to always be my heart, my joy, and my everything 💘");
+    await new Promise(r => setTimeout(r, 1000));
+    await slowPrint("I always have sleepless nights, thinking about how to achieve my dreams with you 💘");
+    await new Promise(r => setTimeout(r, 1000));
+    await slowPrint("I pray this year brings you peace, growth, and all the joy you deserve.");
+    await slowPrint("And don’t forget, I’ll always be here—debugging life with you 😄");
+    output.innerHTML += "<br><br>With all my love,<br>Daredevil 💔 ❤";
+}
+runProgram();
+</script>
+</body>
+</html> 
