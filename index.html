@@ -164,11 +164,6 @@
         transform: rotate(45deg);
       }
 
-      .char {
-        display: inline-block;
-        animation: popIn 0.2s ease-out;
-      }
-
       .heart {
         line-height: 0.95;
         font-size: clamp(16px, 3vw, 24px);
@@ -206,17 +201,6 @@
         }
         to {
           transform: translateY(30px);
-        }
-      }
-
-      @keyframes popIn {
-        from {
-          opacity: 0;
-          transform: translateY(6px) scale(0.98);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
         }
       }
 
@@ -278,10 +262,10 @@
       let confettiEnabled = true;
 
       const audio = new Audio(
-        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
       );
       audio.loop = true;
-      audio.volume = 0.25;
+      audio.volume = 0.22;
 
       function toggleMusic() {
         musicEnabled = !musicEnabled;
@@ -329,12 +313,14 @@
           function type() {
             if (i < msg.length) {
               const char = msg[i];
-              output.innerHTML +=
-                char === " " ? "&nbsp;" : `<span class="char">${char}</span>`;
+              output.insertAdjacentHTML(
+                "beforeend",
+                char === " " ? "&nbsp;" : char,
+              );
               i++;
               setTimeout(type, delay);
             } else {
-              output.innerHTML += "<br>";
+              output.insertAdjacentHTML("beforeend", "<br>");
               resolve();
             }
           }
