@@ -33,7 +33,7 @@
         justify-content: center;
         align-items: center;
         padding: 24px;
-        overflow-x: hidden;
+        overflow: hidden;
         position: relative;
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
@@ -104,9 +104,9 @@
 
       #output {
         position: relative;
-        z-index: 1;
-        width: min(100%, 900px);
-        background: rgba(255, 255, 255, 0.08);
+        z-index: 2;
+        width: min(100%, 920px);
+        background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(14px);
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 24px;
@@ -119,6 +119,49 @@
         margin-top: 0;
         word-break: break-word;
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.12);
+      }
+
+      .controls {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 3;
+        display: flex;
+        gap: 10px;
+      }
+
+      .control-btn {
+        border: none;
+        border-radius: 999px;
+        padding: 10px 14px;
+        background: rgba(255, 255, 255, 0.16);
+        color: white;
+        cursor: pointer;
+        font-size: 14px;
+        backdrop-filter: blur(10px);
+      }
+
+      .control-btn:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.24);
+      }
+
+      .confetti {
+        position: fixed;
+        top: -10px;
+        width: 10px;
+        height: 16px;
+        opacity: 0.95;
+        animation: fall linear forwards;
+        z-index: 1;
+      }
+
+      .confetti::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: inherit;
+        transform: rotate(45deg);
       }
 
       .char {
@@ -187,6 +230,17 @@
         }
       }
 
+      @keyframes fall {
+        0% {
+          transform: translate3d(0, 0, 0) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translate3d(var(--drift), 110vh, 0) rotate(720deg);
+          opacity: 0;
+        }
+      }
+
       @media (max-width: 600px) {
         body {
           padding: 16px;
@@ -208,12 +262,67 @@
     </style>
   </head>
   <body>
+    <div class="controls">
+      <button class="control-btn" id="musicToggle">🔊 Music</button>
+      <button class="control-btn" id="confettiBtn">🎉 Confetti</button>
+    </div>
     <div class="bg-orb orb-1"></div>
     <div class="bg-orb orb-2"></div>
     <div class="bg-orb orb-3"></div>
     <div id="output"></div>
     <script>
       const output = document.getElementById("output");
+      const musicToggle = document.getElementById("musicToggle");
+      const confettiBtn = document.getElementById("confettiBtn");
+      let musicEnabled = true;
+      let confettiEnabled = true;
+
+      const audio = new Audio(
+        "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+      );
+      audio.loop = true;
+      audio.volume = 0.25;
+
+      function toggleMusic() {
+        musicEnabled = !musicEnabled;
+        musicToggle.textContent = musicEnabled ? "🔊 Music" : "🔈 Music";
+        if (musicEnabled) {
+          audio.play().catch(() => {});
+        } else {
+          audio.pause();
+        }
+      }
+
+      function createConfetti() {
+        if (!confettiEnabled) return;
+        const colors = ["#ff4f91", "#ffd166", "#4dd4ff", "#9b5cff", "#7efc7f"];
+        for (let i = 0; i < 40; i++) {
+          const piece = document.createElement("div");
+          piece.className = "confetti";
+          piece.style.left = Math.random() * 100 + "vw";
+          piece.style.background =
+            colors[Math.floor(Math.random() * colors.length)];
+          piece.style.setProperty(
+            "--drift",
+            (Math.random() - 0.5) * 200 + "px",
+          );
+          piece.style.animationDuration = Math.random() * 2 + 2.5 + "s";
+          piece.style.animationDelay = Math.random() * 0.2 + "s";
+          document.body.appendChild(piece);
+          setTimeout(() => piece.remove(), 4000);
+        }
+      }
+
+      musicToggle.addEventListener("click", toggleMusic);
+      confettiBtn.addEventListener("click", () => {
+        confettiEnabled = !confettiEnabled;
+        confettiBtn.textContent = confettiEnabled
+          ? "🎉 Confetti"
+          : "🎊 Confetti";
+      });
+
+      document.addEventListener("click", createConfetti);
+      setInterval(createConfetti, 1200);
       function slowPrint(msg, delay = 40) {
         return new Promise((resolve) => {
           let i = 0;
